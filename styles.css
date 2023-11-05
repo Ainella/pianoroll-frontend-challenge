@@ -17,6 +17,11 @@ body {
   position: relative;
 }
 
+.piano-roll {
+  position: relative;
+  cursor: pointer;
+}
+
 .navbar {
   display: flex;
   align-items: center;
@@ -31,15 +36,45 @@ body {
   fill: white;
 }
 
-#pianoRollContainer {
+.piano-roll-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+  padding: 20px;
+
+}
+
+.piano-roll-column {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  float: right;
+  width: 25%;
+  overflow-y: scroll; 
+  max-height: 500px; 
+}
+
+#pianoRollMain {
+  width: 60%;
+  display: flex;
+  float: left;
+  margin-top: 20px;
+}
+
+.hide {
+  display: none;
 }
 
 h1 {
   margin-bottom: 20px;
   font-size: 42px;
+}
+
+.selection {
+  background-color: rgba(0, 0, 255, 0.3); 
+  position: relative;
+  z-index: 2;
+  pointer-events: none; 
+  height: 100px;
 }
 
 button {
@@ -77,8 +112,12 @@ button:hover {
   border: 1px solid #ccc;
   margin-bottom: 10px;
   padding: 10px;
-  width: 50%;
+  width: 100%;
   box-sizing: border-box;
+}
+
+#pianoRollMain .piano-roll-card {
+  /*zoom: 200%;*/
 }
 
 .description {

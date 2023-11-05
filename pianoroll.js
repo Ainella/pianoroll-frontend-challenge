@@ -11,6 +11,7 @@ export function generateGradientTable(startColor, endColor, steps) {
 
 export default class PianoRoll {
   constructor(svgElement, sequence) {
+    this.sequence = sequence;
     this.svgElement = svgElement;
     this.end = null;
 
@@ -128,5 +129,44 @@ export default class PianoRoll {
       line.setAttribute('stroke', 'black');
       this.svgElement.appendChild(line);
     }
+  }
+
+  selection(start, end) {
+    start = start / this.svgElement.getBoundingClientRect().width;
+    end = end / this.svgElement.getBoundingClientRect().width;
+    this.selstart = start;
+    this.selend = end;
+    const children = this.svgElement.children;
+    //console.log(start,end);
+    for (let i = 0; i < children.length; i++) {
+      const el = children.item(i);
+      //console.log(el.tagName,el.getAttribute('x'));
+      if (el.tagName == 'rect') {
+        const x = el.getAttribute('x');
+        if (start <x && x < end) {
+          el.oldFill = el.getAttribute('fill');
+          el.setAttribute('fill', 'red');
+          //console.log(el.getAttribute('fill'));
+        }
+        else if(el.oldFill) {
+          el.setAttribute('fill',el.oldFill);
+          el.oldFill = null;
+        }
+      }
+
+    }
+
+  }
+
+  getSelectedNotes() {
+    const notes = []; 
+    this.sequence.forEach((note) => {
+      const x = this.timeToX(note.start - this.start);
+      if(this.selstart < x && x < this.selend) {
+        notes.push(note);
+      }
+    }
+    );
+    return notes;
   }
 }

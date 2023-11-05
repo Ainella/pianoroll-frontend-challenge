@@ -1,4 +1,5 @@
 import PianoRoll from './pianoroll.js';
+import Selection from './selection.js';
 
 class PianoRollDisplay {
   constructor(csvURL) {
@@ -42,7 +43,7 @@ class PianoRollDisplay {
   async generateSVGs() {
     if (!this.data) await this.loadPianoRollData();
     if (!this.data) return;
-    
+
     const pianoRollContainer = document.getElementById('pianoRollContainer');
     pianoRollContainer.innerHTML = '';
     for (let it = 0; it < 20; it++) {
@@ -54,6 +55,22 @@ class PianoRollDisplay {
 
       pianoRollContainer.appendChild(cardDiv);
       const roll = new PianoRoll(svg, partData);
+
+      cardDiv.addEventListener('click', () => {
+        console.log('click');
+        const { cardDiv, svg } = this.preparePianoRollCard(it);
+        const pianoRollMain = document.getElementById('pianoRollMain');
+        pianoRollMain.innerHTML = '';
+        pianoRollMain.appendChild(cardDiv);
+        const roll = new PianoRoll(svg, partData);
+
+        svg.addEventListener("mousedown", (e) => {
+          new Selection(roll,e.offsetX);
+        });
+
+        pianoRollContainer.className = 'piano-roll-column';
+        pianoRollMain.classList.remove('hide');
+      });
     }
   }
 }
